@@ -7,11 +7,30 @@ new Vue(
             brands: [],
             foods: [],
             chemicals : [],
+            allChemicals : [],
             isNew: false,
             selectedBrand : 0,
             selectedFood : 0,
             loading: true,
-            errored: false
+            errored: false,
+            noChemical: false
+        },
+        methods: {
+            loadChemicals(){
+                if(this.allChemicals.length > 0)
+                    return;
+
+                axios
+                .get(server + '/chemicals')
+                .then(response => {
+                  this.allChemicals = response.data
+                })
+                .catch(error => {
+                  console.log(error)
+                  this.errored = true
+                })
+                .finally(() => this.loading = false)
+            }
         },
         watch: {
             selectedBrand : function(){
@@ -44,9 +63,14 @@ new Vue(
                   this.isNew = this.chemicals.length == 0
                 })
                 .catch(error => {
-                  console.log(error)
-                  this.errored = true
-                  this.isNew = true
+                  if(error.response.status==404) {
+                    this.isNew = true
+                    this.loadChemicals();
+                  }else { 
+                    console.log(error)
+                    this.errored = true
+                  }  
+                  
                 })
                 .finally(() => this.loading = false)
             }        

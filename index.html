@@ -68,19 +68,12 @@
                             <h5 class="card-title mb-4">Produtos Quimicos</h5>
 
                             <div class="custom-control custom-checkbox mb-4">
-                                <input type="checkbox" class="custom-control-input" id="customControlValidation1">
-                                <label class="custom-control-label alert-success"
-                                    for="customControlValidation1"><b>Nenhum</b></label>
+                                <input @click="noChemical=!noChemical" type="checkbox" class="custom-control-input" id="customControlValidation1">
+                                <label class="custom-control-label alert-success" for="customControlValidation1"><b>Nenhum</b></label>
                             </div>
-                            <div class="custom-control custom-checkbox mb-4">
-                                <input type="checkbox" class="custom-control-input" id="customControlValidation2">
-                                <label class="custom-control-label" for="customControlValidation2">Ácido Acético
-                                    Glacial</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-4">
-                                <input type="checkbox" class="custom-control-input" id="customControlValidation3">
-                                <label class="custom-control-label" for="customControlValidation3">Ácido
-                                    Ascórbico</label>
+                            <div class="custom-control custom-checkbox mb-4" v-for="(chemical,index) in allChemicals" v-if="!noChemical">
+                                <input type="checkbox" class="custom-control-input" :id="index" :value="chemical.id">
+                                <label class="custom-control-label" :for="index">{{chemical.name}}</label>
                             </div>
                         </div>
                     </div>
