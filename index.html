@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <style>
+        .custom-control-label::before,
+        .custom-control-label::after {
+            top: -0.3rem;
+            left: -2.5rem;
+            width: 2rem;
+            height: 2rem;
+        }
+    </style>
+    <title>O que voce come</title>
+</head>
+
+<body background="quimicos.jpg" style="background-size: cover">
+    <div id="app">
+        <div class="container">
+            <div class="my-5 text-center text-light">
+                <h2>O QUE VOCÊ COME ?</h2>
+                <p>Veja os produtos quimicos que acompanham os alimentos que você consome.</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-6" style="background-color:#ffffff">
+                    <div class="form-inline mb-3 mt-3">
+                        <select class="form-control form-control-lg col-11 mr-2" v-model="selectedBrand">
+                            <option value="0">Escolha a Marca</option>
+                            <option value="2">Nestle</option>
+                            <option value="3">Naturali</option>
+                            <option value="4">União</option>
+                        </select>
+                        <button class="btn btn-lg shadow-none p-0 m-0" data-toggle="modal"
+                            data-target="#cadastroMarcaModal" data-whatever="@mdo">
+                            <i class="fa fa-plus b-0"></i>
+                        </button>
+                    </div>
+                    <div class="form-inline mb-3">
+                        <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
+                            <option value="0">Escolha o Alimento</option>
+                            <option value="2">Suco de uva</option>
+                            <option value="3">Manteiga</option>
+                        </select>
+                        <button class="btn btn-lg shadow-none p-0 m-0" data-toggle="modal"
+                            data-target="#cadastroAlimentoModal" data-whatever="@mdo">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <input class="form-control form-control-lg mb-3 col-11" type="number"
+                        placeholder="Código de barras" v-if="isNew">
+
+                    <div class="card mb-3" style="width: 18rem;" v-if="isNew">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Produtos Quimicos</h5>
+
+                            <div class="custom-control custom-checkbox mb-4">
+                                <input type="checkbox" class="custom-control-input" id="customControlValidation1">
+                                <label class="custom-control-label alert-success"
+                                    for="customControlValidation1"><b>Nenhum</b></label>
+                            </div>
+                            <div class="custom-control custom-checkbox mb-4">
+                                <input type="checkbox" class="custom-control-input" id="customControlValidation2">
+                                <label class="custom-control-label" for="customControlValidation2">Ácido Acético
+                                    Glacial</label>
+                            </div>
+                            <div class="custom-control custom-checkbox mb-4">
+                                <input type="checkbox" class="custom-control-input" id="customControlValidation3">
+                                <label class="custom-control-label" for="customControlValidation3">Ácido
+                                    Ascórbico</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template v-if="chemicals.lenghth > 0">
+                        <h5 class="card-title mb-4 mt-4">Produtos Quimicos desse produto</h5>
+
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item">Ácido Acético Glacial</li>
+                            <li class="list-group-item">Ácido Ascórbico</li>
+                            <li class="list-group-item">Ácido Bórico</li>
+                            <li class="list-group-item">Ácido Cítrico</li>
+                            <li class="list-group-item">Ácido Fosfórico</li>
+                        </ul>
+                    </template>
+
+                    <button v-if="isNew" class="btn btn-primary btn-lg btn-block mt-5 mb-5" type="button" data-toggle="modal"
+                        data-target="#cadastradoModal">Cadastrar</button>
+                    <button class="btn btn-primary btn-lg btn-block mt-5 mb-5" type="button" data-toggle="modal"
+                        data-target="#naoAcheiModal">Não achei o meu alimento</button>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+
+    <div class="modal fade" id="naoAcheiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Não achei o meu alimento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-5">Se não tiver o alimento que procura você pode cadastrar novas marcas , alimentos
+                        e
+                        relaciona-los
+                        aos produtos quimicos que vem com eles. Aperte o botão + para adicionar novos itens, é
+                        necessário
+                        colocar o codigo de barra para facilitar a busca pela app de celular.</p>
+                    <p class="mb-5">Qualquer duvida ou sugetão entre em contato pelo email : <a
+                            href="mailto: betterworldemail@gmail.com">betterworldemail@gmail.com</a>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="cadastradoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Alimento Cadastrado!</h4>
+                        <p>Obrigado pela sua contribuição.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cadastroMarcaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cadastrar uma marca</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Nome da Marca:</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cadastroAlimentoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cadastrar um alimento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Nome do Alimento:</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="app.js"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
