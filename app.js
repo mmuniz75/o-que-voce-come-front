@@ -13,8 +13,14 @@ new Vue(
             loading: true,
             errored: false
         },
-        methods: {
-            getFoods(){
+        watch: {
+            selectedBrand : function(){
+                this.selectedFood=0
+                this.isNew = false
+                this.foods = []
+                this.chemicals = []
+                if(this.selectedBrand==0)
+                    return;
                 axios
                 .get(server + '/brands/' + this.selectedBrand + '/foods')
                 .then(response => {
@@ -26,15 +32,21 @@ new Vue(
                 })
                 .finally(() => this.loading = false)
             },
-            getChemicals(){
+            selectedFood : function(){
+                this.isNew = false
+                this.chemicals = []
+                if(this.selectedFood==0)
+                    return;
                 axios
                 .get(server + '/brands/' + this.selectedBrand + '/foods/' + this.selectedFood + '/chemicals')
                 .then(response => {
                   this.chemicals = response.data
+                  this.isNew = this.chemicals.length == 0
                 })
                 .catch(error => {
                   console.log(error)
                   this.errored = true
+                  this.isNew = true
                 })
                 .finally(() => this.loading = false)
             }        

@@ -37,7 +37,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6" style="background-color:#ffffff">
                     <div class="form-inline mb-3 mt-3">
-                        <select @change="getFoods" class="form-control form-control-lg col-11 mr-2" v-model="selectedBrand">
+                        <select class="form-control form-control-lg col-11 mr-2" v-model="selectedBrand">
                             <option value="0">Escolha a Marca</option>
                             <template v-for="brand in brands">
                                 <option :value="brand.id">{{brand.name}}</option>
@@ -49,7 +49,7 @@
                         </button>
                     </div>
                     <div class="form-inline mb-3" v-if="selectedBrand > 0">
-                        <select @change="getChemicals" class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
+                        <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
                             <option value="0">Escolha o Alimento</option>
                             <template v-for="food in foods">
                                 <option :value="food.foodId">{{food.food}}</option>
@@ -94,7 +94,7 @@
 
                     <button v-if="isNew" class="btn btn-primary btn-lg btn-block mt-5 mb-5" type="button" data-toggle="modal"
                         data-target="#cadastradoModal">Cadastrar</button>
-                    <button class="btn btn-primary btn-lg btn-block mt-5 mb-5" type="button" data-toggle="modal"
+                    <button v-if="chemicals.length == 0 && !isNew" class="btn btn-primary btn-lg btn-block mt-5 mb-5" type="button" data-toggle="modal"
                         data-target="#naoAcheiModal">Não achei o meu alimento</button>
                 </div>
             </div>
