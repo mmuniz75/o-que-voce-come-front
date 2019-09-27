@@ -1,5 +1,7 @@
 server = 'http://localhost:5000';
 
+//server = 'http://35.229.29.128:5000';
+
 new Vue(
     {
         el: '#app',
@@ -33,17 +35,17 @@ new Vue(
             }
         },
         watch: {
-            selectedBrand : function(){
-                this.selectedFood=0
+          selectedFood: function(){
+                this.selectedBrand=0
                 this.isNew = false
-                this.foods = []
+                this.brands = []
                 this.chemicals = []
-                if(this.selectedBrand==0)
+                if(this.selectedFood==0)
                     return;
                 axios
-                .get(server + '/brands/' + this.selectedBrand + '/foods')
+                .get(server + '/foods/' + this.selectedFood + '/brands')
                 .then(response => {
-                  this.foods = response.data
+                  this.brands = response.data
                 })
                 .catch(error => {
                   console.log(error)
@@ -51,10 +53,10 @@ new Vue(
                 })
                 .finally(() => this.loading = false)
             },
-            selectedFood : function(){
+            selectedBrand: function(){
                 this.isNew = false
                 this.chemicals = []
-                if(this.selectedFood==0)
+                if(this.selectedBrand==0)
                     return;
                 axios
                 .get(server + '/brands/' + this.selectedBrand + '/foods/' + this.selectedFood + '/chemicals')
@@ -78,9 +80,9 @@ new Vue(
 
         mounted () {
             axios
-              .get(server + '/brands')
+              .get(server + '/foods')
               .then(response => {
-                this.brands = response.data
+                this.foods = response.data
               })
               .catch(error => {
                 console.log(error)
