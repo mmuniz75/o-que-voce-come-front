@@ -17,7 +17,8 @@ new Vue(
             errored: false,
             noChemical: false,
             message: '',
-            inputFood : ''
+            inputFood : '',
+            inputBrand : ''
         },
         methods: {
             loadChemicals(){
@@ -58,6 +59,27 @@ new Vue(
               this.inputFood = ''
               this.foods.push(response.data)
               this.foods.sort(this.compare);
+            })
+            .catch(error => {
+              this.handleServerError(error)
+            })
+            .finally(() => {
+              this.loading = false
+            }  
+            )
+          },
+          saveBrand(){
+            $('#cadastroMarcaModal').modal('hide')
+            this.loading = true
+            axios
+            .post(server + '/brands',{name : this.inputBrand})
+            .then(response => {
+              this.message = "Marca Cadastrada"
+              this.errored = false
+              $('#dialogModal').modal('show')
+              this.inputBrand = ''
+              this.brands.push(response.data)
+              this.brands.sort(this.compare);
             })
             .catch(error => {
               this.handleServerError(error)

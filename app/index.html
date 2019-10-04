@@ -153,13 +153,13 @@
                         <form>
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Nome da Marca:</label>
-                                <input type="text" class="form-control" id="recipient-name">
+                                <input type="text" class="form-control" id="brandInput"  v-model="inputBrand">
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Cadastrar</button>
+                        <button type="button"  @click="saveBrand" :disabled="inputBrand.length == 0" class="btn btn-primary">Cadastrar</button>
                     </div>
                 </div>
             </div>
