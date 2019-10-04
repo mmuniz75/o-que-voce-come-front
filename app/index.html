@@ -4,7 +4,7 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-    
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,7 +27,10 @@
     <title>O que voce come</title>
 </head>
 
-<body background="quimicos.jpg" style="background-size: cover">
+<body background="quimicos.jpg" style="background-size: cover;
+                                       position: relative;
+                                       background-repeat:no-repeat;
+                                       background-size:100% 100vh;">
     <div id="app">
         <div class="container">
             <div class="my-5 text-center text-light">
@@ -36,7 +39,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-lg-6" style="background-color:#ffffff">
-                    <div class="form-inline mb-3  mt-3" >
+                    <div class="form-inline mb-3  mt-3">
                         <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
                             <option value="0">Escolha o Alimento</option>
                             <template v-for="food in foods">
@@ -60,18 +63,21 @@
                             <i class="fa fa-plus b-0"></i>
                         </button>
                     </div>
-                    <input class="form-control form-control-lg mb-3 col-11" type="number"
-                        placeholder="Código de barras" v-if="isNew">
+                    <input class="form-control form-control-lg mb-3 col-11" type="number" placeholder="Código de barras"
+                        v-if="isNew">
 
                     <div class="card mb-3" style="width: 18rem;" v-if="isNew">
                         <div class="card-body">
                             <h5 class="card-title mb-4">Produtos Quimicos</h5>
 
                             <div class="custom-control custom-checkbox mb-4">
-                                <input @click="noChemical=!noChemical" type="checkbox" class="custom-control-input" id="customControlValidation1">
-                                <label class="custom-control-label alert-success" for="customControlValidation1"><b>Nenhum</b></label>
+                                <input @click="noChemical=!noChemical" type="checkbox" class="custom-control-input"
+                                    id="customControlValidation1">
+                                <label class="custom-control-label alert-success"
+                                    for="customControlValidation1"><b>Nenhum</b></label>
                             </div>
-                            <div class="custom-control custom-checkbox mb-4" v-for="(chemical,index) in allChemicals" v-if="!noChemical">
+                            <div class="custom-control custom-checkbox mb-4" v-for="(chemical,index) in allChemicals"
+                                v-if="!noChemical">
                                 <input type="checkbox" class="custom-control-input" :id="index" :value="chemical.id">
                                 <label class="custom-control-label" :for="index">{{chemical.name}}</label>
                             </div>
@@ -85,117 +91,117 @@
                         </ul>
                     </template>
 
-                    <button v-if="isNew" class="btn btn-primary btn-lg btn-block mt-5 mb-5" type="button" data-toggle="modal"
-                        data-target="#cadastradoModal">Cadastrar</button>
-                    <button v-if="chemicals.length == 0 && !isNew" class="btn btn-primary btn-lg btn-block mt-5 mb-5" type="button" data-toggle="modal"
-                        data-target="#naoAcheiModal">Não achei o meu alimento</button>
+                    <button v-if="isNew" class="btn btn-primary btn-lg btn-block mt-5 mb-5" type="button"
+                        data-toggle="modal" data-target="#cadastradoModal">Cadastrar</button>
+                    <button v-if="chemicals.length == 0 && !isNew" class="btn btn-primary btn-lg btn-block mt-5 mb-5"
+                        type="button" data-toggle="modal" data-target="#naoAcheiModal">Não achei o meu alimento</button>
                 </div>
             </div>
 
         </div>
-        
-    </div>
 
-    <div class="modal fade" id="naoAcheiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Não achei o meu alimento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p class="mb-5">Se não tiver o alimento que procura você pode cadastrar novas marcas , alimentos
-                        e
-                        relaciona-los
-                        aos produtos quimicos que vem com eles. Aperte o botão + para adicionar novos itens, é
-                        necessário
-                        colocar o codigo de barra para facilitar a busca pela app de celular.</p>
-                    <p class="mb-5">Qualquer duvida ou sugetão entre em contato pelo email : <a
-                            href="mailto: betterworldemail@gmail.com">betterworldemail@gmail.com</a>.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="modal fade" id="cadastradoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading">Alimento Cadastrado!</h4>
-                        <p>Obrigado pela sua contribuição.</p>
+        <div class="modal fade" id="naoAcheiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Não achei o meu alimento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-5">Se não tiver o alimento que procura você pode cadastrar novas marcas , alimentos
+                            e
+                            relaciona-los
+                            aos produtos quimicos que vem com eles. Aperte o botão + para adicionar novos itens, é
+                            necessário
+                            colocar o codigo de barra para facilitar a busca pela app de celular.</p>
+                        <p class="mb-5">Qualquer duvida ou sugetão entre em contato pelo email : <a
+                                href="mailto: betterworldemail@gmail.com">betterworldemail@gmail.com</a>.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="cadastroMarcaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Cadastrar uma marca</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Nome da Marca:</label>
-                            <input type="text" class="form-control" id="recipient-name">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Cadastrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="cadastroAlimentoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Cadastrar um alimento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Nome do Alimento:</label>
-                            <input type="text" class="form-control" id="recipient-name">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Cadastrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
+        <div class="modal fade" id="dialogModal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{errored ? 'Erro':'Confirmação'}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div :class="{'alert alert-success': !errored,'alert alert-danger': errored}" role="alert">
+                            <h4 >{{message}}</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="cadastroMarcaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cadastrar uma marca</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Nome da Marca:</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Cadastrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="cadastroAlimentoModal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cadastrar um alimento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Nome do Alimento:</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" @click="saveFood" class="btn btn-primary">Cadastrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <script src="app.js"></script>
 

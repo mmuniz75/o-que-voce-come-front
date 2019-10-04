@@ -15,23 +15,36 @@ new Vue(
             selectedFood : 0,
             loading: true,
             errored: false,
-            noChemical: false
+            noChemical: false,
+            message: 'Teste de mensagem'
         },
         methods: {
             loadChemicals(){
                 if(this.allChemicals.length > 0)
                     return;
 
+                this.loading = true
                 axios
                 .get(server + '/chemicals')
                 .then(response => {
                   this.allChemicals = response.data
                 })
                 .catch(error => {
-                  console.log(error)
-                  this.errored = true
+                  this.handleServerError(error)
                 })
                 .finally(() => this.loading = false)
+            },
+            saveFood(){
+              this.message = "Alimento Cadastrado"
+              this.errored = false
+              $('#cadastroAlimentoModal').modal('hide')
+              $('#dialogModal').modal('show')
+            },
+            handleServerError(error){
+              console.log(error)
+              this.errored = true
+              this.message = "Ocorreu um erro.Tente novamente mais tarde."
+              $('#dialogModal').modal('show')
             }
         },
         watch: {
@@ -48,8 +61,7 @@ new Vue(
                   this.brands = response.data
                 })
                 .catch(error => {
-                  console.log(error)
-                  this.errored = true
+                  this.handleServerError(error)
                 })
                 .finally(() => this.loading = false)
             },
@@ -69,8 +81,7 @@ new Vue(
                     this.isNew = true
                     this.loadChemicals();
                   }else { 
-                    console.log(error)
-                    this.errored = true
+                    this.handleServerError(error)
                   }  
                   
                 })
@@ -85,8 +96,7 @@ new Vue(
                 this.foods = response.data
               })
               .catch(error => {
-                console.log(error)
-                this.errored = true
+                this.handleServerError(error)
               })
               .finally(() => this.loading = false)
           }
