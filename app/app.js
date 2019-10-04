@@ -13,7 +13,7 @@ new Vue(
             isNew: false,
             selectedBrand : 0,
             selectedFood : 0,
-            loading: true,
+            loading: false,
             errored: false,
             noChemical: false,
             message: 'Teste de mensagem'
@@ -55,6 +55,8 @@ new Vue(
                 this.chemicals = []
                 if(this.selectedFood==0)
                     return;
+
+                this.loading = true
                 axios
                 .get(server + '/foods/' + this.selectedFood + '/brands')
                 .then(response => {
@@ -70,6 +72,8 @@ new Vue(
                 this.chemicals = []
                 if(this.selectedBrand==0)
                     return;
+
+                this.loading = true
                 axios
                 .get(server + '/brands/' + this.selectedBrand + '/foods/' + this.selectedFood + '/chemicals')
                 .then(response => {
@@ -90,6 +94,7 @@ new Vue(
         },
 
         mounted () {
+            this.loading = true
             axios
               .get(server + '/foods')
               .then(response => {

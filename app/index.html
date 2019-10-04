@@ -15,15 +15,8 @@
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-    <style>
-        .custom-control-label::before,
-        .custom-control-label::after {
-            top: -0.3rem;
-            left: -2.5rem;
-            width: 2rem;
-            height: 2rem;
-        }
-    </style>
+    <link href="./app.css" rel="stylesheet" >
+
     <title>O que voce come</title>
 </head>
 
@@ -39,7 +32,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-lg-6" style="background-color:#ffffff">
-                    <div class="form-inline mb-3  mt-3">
+                    <div class="form-inline mb-3  mt-3" >
                         <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
                             <option value="0">Escolha o Alimento</option>
                             <template v-for="food in foods">
@@ -200,6 +193,13 @@
                 </div>
             </div>
         </div>
+        
+        <div class="gray d-flex justify-content-center" v-if="loading">
+            <div class="spinner-border text-light spinner-center" role="status" >
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        
 
     </div>
 
