@@ -16,7 +16,8 @@ new Vue(
             loading: false,
             errored: false,
             noChemical: false,
-            message: 'Teste de mensagem'
+            message: '',
+            inputFood : ''
         },
         methods: {
             loadChemicals(){
@@ -35,17 +36,45 @@ new Vue(
                 .finally(() => this.loading = false)
             },
             saveFood(){
-              this.message = "Alimento Cadastrado"
-              this.errored = false
               $('#cadastroAlimentoModal').modal('hide')
-              $('#dialogModal').modal('show')
+              this.loading = true
+              axios
+              .post(server + '/foods',{name : this.inputFood})
+              .then(response => {
+                this.message = "Alimento Cadastrado"
+                this.errored = false
+                $('#dialogModal').modal('show')
+                this.inputFood = ''
+                this.foods.push(response.data)
+                this.foods.sort(this.compare);
+              })
+              .catch(error => {
+                this.handleServerError(error)
+              })
+              .finally(() => {
+                this.loading = false
+              }  
+              )
+              
             },
             handleServerError(error){
               console.log(error)
               this.errored = true
-              this.message = "Ocorreu um erro.Tente novamente mais tarde."
+              if(error.response && error.response.data && error.response.data.message)
+                this.message=error.response.data.message 
+              else
+                this.message = "Ocorreu um erro.Tente novamente mais tarde."
               $('#dialogModal').modal('show')
+           },
+           compare( a, b ) {
+            if ( a.name.toLowerCase() < b.name.toLowerCase() ){
+              return -1;
             }
+            if ( a.name.toLowerCase() > b.name.toLowerCase() ){
+              return 1;
+            }
+            return 0;
+          }
         },
         watch: {
           selectedFood: function(){
