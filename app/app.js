@@ -97,12 +97,11 @@ new Vue(
             axios
             .post(server + '/brands/' + this.selectedBrand + '/foods/' + this.selectedFood,{'bar-code' : this.inputBarCode,'chemicals' : this.selectedChemicals})
             .then(response => {
-              this.message = "Quimicos Cadastrados"
-              this.errored = false
-              $('#dialogModal').modal('show')
               this.isNew = false;
               this.inputBarCode = ''
+              this.updateSelectedChemicals()
               this.selectedChemicals = []
+              this.noChemical = false
             })
             .catch(error => {
               this.handleServerError(error)
@@ -111,6 +110,13 @@ new Vue(
               this.loading = false
             }  
             )
+          },
+          updateSelectedChemicals(){
+             this.chemicals = [];
+             for (checmicalId in this.selectedChemicals)
+              this.chemicals.push(this.allChemicals.filter(chemical => chemical.id == this.selectedChemicals[checmicalId])[0].name)
+
+              this.chemicals.sort()
           },
           handleServerError(error){
             console.log(error)
