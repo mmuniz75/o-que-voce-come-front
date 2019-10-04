@@ -138,6 +138,7 @@ new Vue(
                 this.chemicals.sort()
             },
             handleServerError(error){
+              this.loading = false
               console.log(error)
               this.errored = true
               if(error.response && error.response.data && error.response.data.message)
