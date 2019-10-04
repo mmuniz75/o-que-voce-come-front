@@ -17,8 +17,11 @@ new Vue(
             errored: false,
             noChemical: false,
             message: '',
-            inputFood : '',
-            inputBrand : ''
+            inputFood: '',
+            inputBrand: '',
+            inputBarCode: '',
+            selectedChemicals: []
+
         },
         methods: {
             loadChemicals(){
@@ -80,6 +83,26 @@ new Vue(
               this.inputBrand = ''
               this.brands.push(response.data)
               this.brands.sort(this.compare);
+            })
+            .catch(error => {
+              this.handleServerError(error)
+            })
+            .finally(() => {
+              this.loading = false
+            }  
+            )
+          },
+          saveChemicals(){
+            this.loading = true
+            axios
+            .post(server + '/brands/' + this.selectedBrand + '/foods/' + this.selectedFood,{'bar-code' : this.inputBarCode,'chemicals' : this.selectedChemicals})
+            .then(response => {
+              this.message = "Quimicos Cadastrados"
+              this.errored = false
+              $('#dialogModal').modal('show')
+              this.isNew = false;
+              this.inputBarCode = ''
+              this.selectedChemicals = []
             })
             .catch(error => {
               this.handleServerError(error)
