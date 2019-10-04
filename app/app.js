@@ -35,67 +35,58 @@ new Vue(
                 })
                 .finally(() => this.loading = false)
             },
-            saveFood(){
-              $('#cadastroAlimentoModal').modal('hide')
-              this.loading = true
+            loadBrands(){
               axios
-              .post(server + '/foods',{name : this.inputFood})
+              .get(server + '/brands')
               .then(response => {
-                this.message = "Alimento Cadastrado"
-                this.errored = false
-                $('#dialogModal').modal('show')
-                this.inputFood = ''
-                this.foods.push(response.data)
-                this.foods.sort(this.compare);
+                this.brands = response.data
               })
               .catch(error => {
                 this.handleServerError(error)
               })
-              .finally(() => {
-                this.loading = false
-              }  
-              )
-              
-            },
-            handleServerError(error){
-              console.log(error)
-              this.errored = true
-              if(error.response && error.response.data && error.response.data.message)
-                this.message=error.response.data.message 
-              else
-                this.message = "Ocorreu um erro.Tente novamente mais tarde."
+              .finally(() => this.loading = false)
+          },
+          saveFood(){
+            $('#cadastroAlimentoModal').modal('hide')
+            this.loading = true
+            axios
+            .post(server + '/foods',{name : this.inputFood})
+            .then(response => {
+              this.message = "Alimento Cadastrado"
+              this.errored = false
               $('#dialogModal').modal('show')
-           },
-           compare( a, b ) {
-            if ( a.name.toLowerCase() < b.name.toLowerCase() ){
-              return -1;
-            }
-            if ( a.name.toLowerCase() > b.name.toLowerCase() ){
-              return 1;
-            }
-            return 0;
+              this.inputFood = ''
+              this.foods.push(response.data)
+              this.foods.sort(this.compare);
+            })
+            .catch(error => {
+              this.handleServerError(error)
+            })
+            .finally(() => {
+              this.loading = false
+            }  
+            )
+          },
+          handleServerError(error){
+            console.log(error)
+            this.errored = true
+            if(error.response && error.response.data && error.response.data.message)
+              this.message=error.response.data.message 
+            else
+              this.message = "Ocorreu um erro.Tente novamente mais tarde."
+            $('#dialogModal').modal('show')
+          },
+          compare( a, b ) {
+          if ( a.name.toLowerCase() < b.name.toLowerCase() ){
+            return -1;
           }
+          if ( a.name.toLowerCase() > b.name.toLowerCase() ){
+            return 1;
+          }
+          return 0;
+        }
         },
         watch: {
-          selectedFood: function(){
-                this.selectedBrand=0
-                this.isNew = false
-                this.brands = []
-                this.chemicals = []
-                if(this.selectedFood==0)
-                    return;
-
-                this.loading = true
-                axios
-                .get(server + '/foods/' + this.selectedFood + '/brands')
-                .then(response => {
-                  this.brands = response.data
-                })
-                .catch(error => {
-                  this.handleServerError(error)
-                })
-                .finally(() => this.loading = false)
-            },
             selectedBrand: function(){
                 this.isNew = false
                 this.chemicals = []
@@ -128,11 +119,11 @@ new Vue(
               .get(server + '/foods')
               .then(response => {
                 this.foods = response.data
+                this.loadBrands();
               })
               .catch(error => {
                 this.handleServerError(error)
               })
-              .finally(() => this.loading = false)
           }
     }
 )
