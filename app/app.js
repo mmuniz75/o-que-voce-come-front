@@ -1,4 +1,4 @@
-/server = 'http://localhost:5000';
+//server = 'http://localhost:5000';
 
 server = 'http://35.229.29.128:5000';
 
