@@ -17,8 +17,8 @@ new Vue(
             inputFood: '',
             inputBrand: '',
             inputBarCode: '',
-            selectedChemicals: []
-
+            selectedChemicals: [],
+            fromSelection: false
         },
         methods: {
             
@@ -38,7 +38,8 @@ new Vue(
               axios
               .get(server + '/brands/' + this.selectedBrand + '/foods/' + this.selectedFood + '/chemicals')
               .then(response => {
-                this.chemicals = response.data
+                this.chemicals = response.data.chemicals
+                this.inputBarCode = response.data['bar_code']
               })
               .catch(error => {
                   this.selectedBrand = 0;
@@ -71,23 +72,58 @@ new Vue(
             }
         },
         watch: {
-            selectedBrand: function(){
+            inputBarCode: function(){
               this.chemicals = []
-              if(this.selectedBrand==0 || this.selectedFood==0)
-                    return;
               
-              this.loadFoodBrandChemicals();
-            },  
+              if (this.inputBarCode.length<13) {
+                this.brands = []
+                this.selectedBrand = 0
 
+                if(!this.fromSelection) {
+                  this.selectedFood = 0
+                }
+                this.fromSelection = false    
+                return;
+              }  
+              
+              this.fromSelection = false
+            
+              this.loading = true
+              axios
+              .get(server + '/brands/foods/' + this.inputBarCode)
+              .then(response => {
+                this.selectedFood = response.data.foodId
+                this.selectedBrand = response.data.brandId
+                this.loadFoodBrandChemicals();
+              })
+              .catch(error => {
+                this.brands = []
+                this.selectedBrand = 0
+                this.selectedFood = 0
+                this.handleServerError(error)
+              })  
+              .finally(() => this.loading = false)
+            },
             selectedFood: function(){
-              this.chemicals = []
-              this.brands = [];
-              this.selectedBrand=0
               if(this.selectedFood==0)
                   return;
 
+              this.fromSelection = true
+              this.inputBarCode = "";                  
               this.loadBrands();
-            }        
+            },
+            selectedBrand: function(){
+              this.chemicals = []
+              if(this.selectedBrand==0 || this.selectedFood==0 || this.brands.length == 0)
+                    return;
+              try{      
+                barCode = this.brands.filter(b => b.brandId === this.selectedBrand)[0].barCode
+                this.inputBarCode = barCode
+              }catch(e){
+                this.handleServerError(e)
+              }
+              
+            }  
         },
 
         mounted () {
