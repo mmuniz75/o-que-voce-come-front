@@ -25,3 +25,8 @@
     width: 3rem; 
     height: 3rem
 }
+
+#btnClose {
+    box-shadow: none;
+    outline: none;
+}
