@@ -1,7 +1,6 @@
 //server = 'http://localhost:5000';
 
 server = 'http://35.229.29.128:5000';
-
 new Vue(
     {
         el: '#app',
@@ -53,12 +52,10 @@ new Vue(
               axios
               .post(server + '/foods',{name : this.inputFood})
               .then(response => {
-                this.message = "Alimento Cadastrado"
-                this.errored = false
-                $('#dialogModal').modal('show')
                 this.inputFood = ''
                 this.foods.push(response.data)
                 this.foods.sort(this.compare);
+                this.selectedFood = response.data.id
               })
               .catch(error => {
                 this.handleServerError(error)
@@ -74,12 +71,10 @@ new Vue(
               axios
               .post(server + '/brands',{name : this.inputBrand})
               .then(response => {
-                this.message = "Marca Cadastrada"
-                this.errored = false
-                $('#dialogModal').modal('show')
                 this.inputBrand = ''
                 this.brands.push(response.data)
                 this.brands.sort(this.compare);
+                this.selectedBrand = response.data.id
               })
               .catch(error => {
                 this.handleServerError(error)
@@ -95,9 +90,13 @@ new Vue(
               .post(server + '/brands/' + this.selectedBrand + '/foods/' + this.selectedFood,{'bar-code' : this.inputBarCode,'chemicals' : this.selectedChemicals})
               .then(response => {
                 this.inputBarCode = ''
-                this.updateSelectedChemicals()
+                this.selectedBrand = 0
+                this.selectedFood = 0
                 this.selectedChemicals = []
                 this.noChemical = false
+                this.message = "Alimento Cadastrado"
+                this.errored = false
+                $('#dialogModal').modal('show')
               })
               .catch(error => {
                 this.handleServerError(error)
@@ -106,13 +105,6 @@ new Vue(
                 this.loading = false
               }  
               )
-            },
-            updateSelectedChemicals(){
-              this.chemicals = [];
-              for (checmicalId in this.selectedChemicals)
-                this.chemicals.push(this.allChemicals.filter(chemical => chemical.id == this.selectedChemicals[checmicalId])[0].name)
-
-                this.chemicals.sort()
             },
             handleServerError(error){
               this.loading = false
