@@ -1,6 +1,6 @@
-//server = 'http://localhost:5000';
+server = 'http://localhost:5000';
 
-server = 'http://35.229.29.128:5000';
+//server = 'http://35.229.29.128:5000';
 new Vue(
     {
         el: '#app',
@@ -127,9 +127,57 @@ new Vue(
             },
             closeRegister() {
               document.location.href="index.html";
-            }
+            },
+            checkAlreadyExists(){
+              this.loading = true
+              axios
+              .get(server + '/brands/' + this.selectedBrand + '/foods/' + this.selectedFood + '/chemicals')
+              .then(response => {
+                this.errored = true
+                this.message = "Alimento e marca já cadastrados"
+                $('#dialogModal').modal('show') 
+                this.selectedBrand = 0
+                this.selectedFood = 0  
+              })
+              .catch(error => {
+                if(error.response.status!=404)
+                  this.handleServerError(error)
+              })
+              .finally(() => this.loading = false)
+            },
         },
-        
+        watch: {
+          inputBarCode: function(){
+            if (this.inputBarCode.length<13) {
+              return;
+            }  
+            
+            this.loading = true
+            axios
+            .get(server + '/brands/foods/' + this.inputBarCode)
+            .then(response => {
+              this.errored = true
+              this.message = "Codigo de barra já cadastrado"
+              $('#dialogModal').modal('show') 
+              this.inputBarCode = ""
+            })
+            .catch(error => {
+              if(error.response.status!=404)
+                this.handleServerError(error)
+            })  
+            .finally(() => this.loading = false)
+          },
+          selectedFood: function(){
+            if(this.selectedBrand==0 || this.selectedFood==0)
+                return;
+            this.checkAlreadyExists()    
+          },
+          selectedBrand: function(){
+            if(this.selectedBrand==0 || this.selectedFood==0)
+                  return;
+            this.checkAlreadyExists()    
+          }  
+      },
         mounted () {
             this.loading = true
             axios
