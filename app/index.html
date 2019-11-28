@@ -53,7 +53,9 @@
                     <template v-if="chemicals.length > 0">
                         <h5 class="card-title mb-4 mt-4">Produtos Quimicos desse produto</h5>
                         <ul class="list-group list-group-flush mb-3" v-for="chemical in chemicals">
-                            <li class="list-group-item">{{chemical}}</li>
+                            <li class="list-group-item alert-success">
+                               <span :class="chemical=='Nenhum'?'alert-success font-weight-bold':''">{{chemical}}</span>
+                            </li>
                         </ul>
                     </template>
 
