@@ -1,6 +1,6 @@
 //server = 'http://localhost:5000';
 
-server = 'http://52.247.220.130:5000';
+server = 'http://35.229.29.128:5000';
 
 new Vue(
     {
@@ -74,6 +74,9 @@ new Vue(
         watch: {
             inputBarCode: function(){
               this.chemicals = []
+
+              if (this.inputBarCode.length==0)
+                return;
               
               if (this.inputBarCode.length<13) {
                 this.brands = []
@@ -105,15 +108,17 @@ new Vue(
               .finally(() => this.loading = false)
             },
             selectedFood: function(){
+              this.inputBarCode = "";
+              this.selectedBrand=0;
               if(this.selectedFood==0)
                   return;
 
               this.fromSelection = true
-              this.inputBarCode = "";                  
+                                
               this.loadBrands();
             },
             selectedBrand: function(){
-              this.chemicals = []
+              this.inputBarCode = "";
               if(this.selectedBrand==0 || this.selectedFood==0 || this.brands.length == 0)
                     return;
               try{      
