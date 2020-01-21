@@ -94,7 +94,7 @@
               inputBarCode: '',
               selectedChemicals: [],
               fromSelection: false,
-              server : 'http://35.229.29.128:5000'
+              server : process.env.VUE_APP_SERVER
             }
         },
         methods: {

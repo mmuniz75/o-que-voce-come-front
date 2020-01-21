@@ -1,1 +1,1 @@
-aws s3 sync app s3://oquevccome.win/ --delete
+aws s3 sync dist s3://oquevccome.win/ --delete
