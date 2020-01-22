@@ -102,37 +102,6 @@
 
     <div
       class="modal fade"
-      id="dialogModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalCenterTitle"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">{{errored ? 'Aviso':'Confirmação'}}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body text-center">
-            <div
-              :class="{'alert alert-success': !errored,'alert alert-danger': errored}"
-              role="alert"
-            >
-              <h4>{{message}}</h4>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="modal fade"
       id="cadastroMarcaModal"
       tabindex="-1"
       role="dialog"
@@ -205,6 +174,7 @@
       </div>
     </div>
 
+    <message :text="message" :isError="errored" @onClose="message = ''"/>
     <spinner :loading="loading" />
 
   </div>
@@ -212,6 +182,7 @@
 
 <script>
   import axios from "axios";
+  import handleResponseError from '../funcs'
 
   export default {
     data: function() {
@@ -311,9 +282,8 @@
             this.selectedFood = 0;
             this.selectedChemicals = [];
             this.noChemical = false;
-            this.message = "Alimento Cadastrado";
             this.errored = false;
-            $("#dialogModal").modal("show");
+            this.message = "Alimento Cadastrado";
           })
           .catch(error => {
             this.handleServerError(error);
@@ -323,13 +293,9 @@
           });
       },
       handleServerError(error) {
-        this.loading = false;
-        console.log(error);
-        this.errored = true;
-        if (error.response && error.response.data && error.response.data.message)
-          this.message = error.response.data.message;
-        else this.message = "Ocorreu um erro.Tente novamente mais tarde.";
-        $("#dialogModal").modal("show");
+        this.loading = false
+        this.errored = true
+        this.message = handleResponseError(error)
       },
       compare(a, b) {
         if (a.name.toLowerCase() < b.name.toLowerCase()) {
@@ -357,7 +323,6 @@
           .then(response => {
             this.errored = true;
             this.message = "Alimento e marca já cadastrados";
-            $("#dialogModal").modal("show");
             this.selectedBrand = 0;
             this.selectedFood = 0;
           })
@@ -379,8 +344,7 @@
           .then(response => {
             this.errored = true;
             this.message = "Codigo de barra já cadastrado";
-            $("#dialogModal").modal("show");
-            this.inputBarCode = "";
+            this.inputBarCode = ''
           })
           .catch(error => {
             if (error.response.status != 404) this.handleServerError(error);

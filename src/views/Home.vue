@@ -44,35 +44,15 @@
 
         </div>
        
-        <div class="modal fade" id="dialogModal" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{{errored ? 'Aviso':'Confirmação'}}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <div :class="{'alert alert-success': !errored,'alert alert-danger': errored}" role="alert">
-                            <h4 >{{message}}</h4>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <spinner :loading="loading" />
+       <message :text="message" isError="true"  @onClose="message = ''"/> 
+       <spinner :loading="loading" />
 
   </div>
 </template>
 
 <script>
     import axios from 'axios';
+    import handleResponseError from '../funcs'
     
     export default {
         data: function () {
@@ -83,7 +63,6 @@
               selectedBrand : 0,
               selectedFood : 0,
               loading: false,
-              errored: false,
               message: '',
               inputFood: '',
               inputBrand: '',
@@ -122,13 +101,7 @@
             },
             handleServerError(error){
               this.loading = false
-              console.log(error)
-              this.errored = true
-              if(error.response && error.response.data && error.response.data.message)
-                this.message=error.response.data.message 
-              else
-                this.message = "Ocorreu um erro.Tente novamente mais tarde."
-              $('#dialogModal').modal('show')
+              this.message = handleResponseError(error)
             },
             compare( a, b ) {
               if ( a.name.toLowerCase() < b.name.toLowerCase() ){
@@ -146,7 +119,6 @@
         watch: {
             inputBarCode: function(){
               this.chemicals = []
-
               if (this.inputBarCode.length==0)
                 return;
               
@@ -203,7 +175,7 @@
             }  
         },
 
-        mounted () {
+        created () {
             this.loading = true
             axios
               .get(this.server + '/foods')
