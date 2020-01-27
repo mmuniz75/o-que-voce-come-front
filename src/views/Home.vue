@@ -8,11 +8,15 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6" style="background-color:#ffffff">
 
-                    <input class="form-control form-control-lg mb-3 mt-3 col-12" type="tel" placeholder="Código de barras"
-                     v-model="inputBarCode" maxlength="13">
+                    <bar-code :value="inputBarCode" 
+                              :exists="false" 
+                              :load="!fromSelection" 
+                              @onLoadIDs="setIds($event)" 
+                              @onChange="clear($event)"
+                              @onFocus="fromSelection=false" />
 
                     <div class="mb-3  mt-3" >
-                        <select class="form-control form-control-lg col-12 mr-2" v-model="selectedFood">
+                        <select class="form-control form-control-lg col-12 mr-2" v-model="selectedFood" @click="fromSelection=true">
                             <option value="0">Escolha o Alimento</option>
                             <template v-for="(food, index) in foods">
                                 <option :value="food.id" :key="index" >{{food.name}}</option>
@@ -20,7 +24,7 @@
                         </select>
                     </div>
                     <div class="mb-3" v-if="selectedFood!=0">
-                        <select class="form-control form-control-lg col-12 mr-2" v-model="selectedBrand">
+                        <select class="form-control form-control-lg col-12 mr-2" v-model="selectedBrand" @click="fromSelection=true">
                             <option value="0">Escolha a Marca</option>
                             <template v-for="(brand, index) in brands">
                                 <option :value="brand.brandId" :key="index">{{brand.brand}}</option>
@@ -68,7 +72,7 @@
               inputBrand: '',
               inputBarCode: '',
               selectedChemicals: [],
-              fromSelection: false,
+              fromSelection: true,
               server : process.env.VUE_APP_SERVER
             }
         },
@@ -114,60 +118,55 @@
             },
             openRegister() {
               this.$router.push('/register')
+            },
+            setIds(ids) {
+               if(!ids) 
+                  return;
+
+               this.selectedBrand = ids.brandId
+               this.selectedFood = ids.foodId
+               this.loadFoodBrandChemicals() 
+            },
+            clear(valid){
+              if (!valid) {
+                this.chemicals = []
+                this.brands = []
+                this.selectedBrand = 0
+                this.selectedFood = 0
+              }  
             }
         },
         watch: {
             inputBarCode: function(){
-              this.chemicals = []
-              if (this.inputBarCode.length==0)
-                return;
               
-              if (this.inputBarCode.length<13) {
-                this.brands = []
-                this.selectedBrand = 0
-
-                if(!this.fromSelection) {
-                  this.selectedFood = 0
-                }
-                this.fromSelection = false    
-                return;
-              }  
-              
-              this.fromSelection = false
-            
-              this.loading = true
-              axios
-              .get(this.server + '/brands/foods/' + this.inputBarCode)
-              .then(response => {
-                this.selectedFood = response.data.foodId
-                this.selectedBrand = response.data.brandId
-                this.loadFoodBrandChemicals();
-              })
-              .catch(error => {
-                this.brands = []
-                this.selectedBrand = 0
-                this.selectedFood = 0
-                this.handleServerError(error)
-              })  
-              .finally(() => this.loading = false)
             },
             selectedFood: function(){
-              this.inputBarCode = "";
-              this.selectedBrand=0;
-              if(this.selectedFood==0)
-                  return;
-
-              this.fromSelection = true
-                                
+              if(this.fromSelection) {
+                this.selectedBrand=0;
+              }
+                
+              if(this.selectedFood==0) { 
+                if(this.fromSelection) {
+                  this.inputBarCode = "";
+                  this.chemicals = []
+                }
+                return;
+              }
+                                              
               this.loadBrands();
             },
             selectedBrand: function(){
-              this.inputBarCode = "";
-              if(this.selectedBrand==0 || this.selectedFood==0 || this.brands.length == 0)
-                    return;
+              if(this.selectedBrand==0 || this.selectedFood==0 || this.brands.length == 0) {
+                  if(this.fromSelection){
+                      this.chemicals = []
+                      this.inputBarCode = "";
+                  }
+                  return;
+              }      
               try{      
                 const barCode = this.brands.filter(b => b.brandId === this.selectedBrand)[0].barCode
                 this.inputBarCode = barCode
+                this.loadFoodBrandChemicals()
               }catch(e){
                 this.handleServerError(e)
               }
@@ -175,7 +174,7 @@
             }  
         },
 
-        created () {
+        mounted () {
             this.loading = true
             axios
               .get(this.server + '/foods')
