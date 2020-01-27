@@ -174,7 +174,7 @@
             }  
         },
 
-        mounted () {
+        created () {
             this.loading = true
             axios
               .get(this.server + '/foods')

@@ -11,13 +11,8 @@
       </div>
       <div class="row justify-content-center">
         <div class="col-lg-6" style="background-color:#ffffff">
-          <input
-            class="form-control form-control-lg mb-3 col-11 mt-3"
-            type="tel"
-            placeholder="Código de barras"
-            v-model="inputBarCode"
-            maxlength="13"
-          />
+
+          <bar-code :value="inputBarCode" :exists="true" />
 
           <div class="form-inline mb-3 mt-3">
             <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
@@ -333,24 +328,6 @@
       }
     },
     watch: {
-      inputBarCode: function() {
-        if (this.inputBarCode.length < 13) {
-          return;
-        }
-
-        this.loading = true;
-        axios
-          .get(this.server + "/brands/foods/" + this.inputBarCode)
-          .then(response => {
-            this.errored = true;
-            this.message = "Codigo de barra já cadastrado";
-            this.inputBarCode = ''
-          })
-          .catch(error => {
-            if (error.response.status != 404) this.handleServerError(error);
-          })
-          .finally(() => (this.loading = false));
-      },
       selectedFood: function() {
         if (this.selectedBrand == 0 || this.selectedFood == 0) return;
         this.checkAlreadyExists();
@@ -361,7 +338,7 @@
       }
     },
 
-    mounted() {
+    created() {
       this.loading = true;
       axios
         .get(this.server + "/foods")

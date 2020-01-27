@@ -29,6 +29,20 @@
     methods: {
       focus(){
         this.$emit('onFocus');
+      },
+      barCodeExists(){
+        this.loading = true;
+        axios
+          .get(process.env.VUE_APP_SERVER + "/brands/foods/" + this.inputBarCode)
+          .then(response => {
+            this.message = "Codigo de barra já cadastrado";
+            this.inputBarCode = ''
+          })
+          .catch(error => {
+            if (error.response.status != 404) 
+              this.message = handleResponseError(error);
+          })
+          .finally(() => (this.loading = false));
       }
     },
     watch: {
@@ -36,12 +50,17 @@
              this.inputBarCode = this.value 
           },
           inputBarCode: function(){
-            if(!this.load)
+            if(!this.load && !this.exists)
                return
             const isValid = this.inputBarCode.length==13
             this.$emit('onChange',isValid);
             if (!isValid)
               return;
+
+            if(this.exists) {
+              this.barCodeExists();
+              return;
+            }  
                         
             this.loading = true
             axios
