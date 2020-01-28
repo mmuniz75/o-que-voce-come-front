@@ -33,14 +33,7 @@
                         </select>
                     </div>
 
-                    <template v-if="chemicals.length > 0">
-                        <h5 class="card-title mb-4 mt-4">Produtos Quimicos desse produto</h5>
-                        <ul class="list-group list-group-flush mb-3" v-for="(chemical, index) in chemicals" :key="index">
-                            <li class="list-group-item alert-success" >
-                               <span :class="chemical=='Nenhum'?'alert-success font-weight-bold':''">{{chemical}}</span>
-                            </li>
-                        </ul>
-                    </template>
+                    <chemical :items="chemicals" />
 
                     <button v-if="chemicals.length == 0" class="btn btn-primary btn-lg btn-block mt-5 mb-5"
                         type="button" @click="openRegister()" >Não achei o meu alimento</button>
@@ -58,8 +51,12 @@
 <script>
     import axios from 'axios';
     import handleResponseError from '../funcs'
+    import chemical from '../components/Chemical'
     
     export default {
+        components : {
+          chemical
+        },
         data: function () {
             return {
               brands: [],
