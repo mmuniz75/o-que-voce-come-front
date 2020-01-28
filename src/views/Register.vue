@@ -50,41 +50,7 @@
             </button>
           </div>
 
-          <div class="card mb-3" style="width: 20rem;">
-            <div class="card-body">
-              <h5 class="card-title mb-4">Adicione os Produtos Quimicos</h5>
-
-              <div class="custom-control custom-checkbox mb-4">
-                <input
-                  @click="noChemical=!noChemical"
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="customControlValidation1"
-                  v-model="selectedChemicals"
-                  value="0"
-                />
-                <label class="custom-control-label alert-success" for="customControlValidation1">
-                  <b>Nenhum</b>
-                </label>
-              </div>
-              <div
-                class="custom-control custom-checkbox mb-4"
-                v-for="(chemical,index) in allChemicals"
-                :key="index"
-              >
-                <template v-if="!noChemical">
-                  <input
-                    type="checkbox"
-                    v-model="selectedChemicals"
-                    class="custom-control-input"
-                    :id="index"
-                    :value="chemical.id"
-                  />
-                  <label class="custom-control-label" :for="index">{{chemical.name}}</label>
-                </template>
-              </div>
-            </div>
-          </div>
+          <all-chemicals :items="allChemicals" @selections="selectedChemicals=$event"/>
 
           <button
             class="btn btn-primary btn-lg btn-block mt-5 mb-5"
@@ -181,8 +147,13 @@
 <script>
   import axios from "axios";
   import handleResponseError from '../funcs'
+  import allChemicals from '../components/AllChemicals'
+  import {eventBus} from '../main'
 
   export default {
+    components : {
+        allChemicals
+    },
     data: function() {
       return {
         brands: [],
@@ -192,7 +163,6 @@
         selectedFood: 0,
         loading: false,
         errored: false,
-        noChemical: false,
         message: "",
         inputFood: "",
         inputBrand: "",
@@ -283,9 +253,9 @@
             this.selectedBrand = 0;
             this.selectedFood = 0;
             this.selectedChemicals = [];
-            this.noChemical = false;
             this.errored = false;
             this.message = "Alimento Cadastrado";
+            eventBus.$emit('clearSelections')
           })
           .catch(error => {
             this.handleServerError(error);

@@ -11,6 +11,8 @@ Vue.component('spinner',Spinner)
 Vue.component('message',Message)
 Vue.component('bar-code',BarCode)
 
+export const eventBus = new Vue()
+
 new Vue({
   router,
   render: h => h(App)
