@@ -11,6 +11,7 @@
 <script>
   import handleResponseError from '../funcs'
   import axios from 'axios'
+  import {eventBus} from '../main'
 
   export default {
     data: function () {
@@ -73,6 +74,11 @@
             })  
             .finally(() => this.loading = false)
           }
+    },
+    created() {
+        eventBus.$on('clearInputs', () => {
+            this.inputBarCode = '';
+        })
     }       
   }
 </script>

@@ -262,7 +262,7 @@
             this.selectedChemicals = [];
             this.errored = false;
             this.message = "Alimento Cadastrado";
-            eventBus.$emit('clearSelections')
+            eventBus.$emit('clearInputs')
           })
           .catch(error => {
             this.handleServerError(error);

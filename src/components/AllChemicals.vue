@@ -53,7 +53,7 @@
       }
     },
     created() {
-        eventBus.$on('clearSelections', () => {
+        eventBus.$on('clearInputs', () => {
             this.hasItem = true;
             this.selectedChemicals = []
         })
