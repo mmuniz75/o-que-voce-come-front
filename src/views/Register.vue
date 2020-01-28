@@ -13,7 +13,7 @@
         <div class="col-lg-6" style="background-color:#ffffff">
 
           <bar-code :value="inputBarCode"
-                    :exists="true" 
+                    :notExists="true" 
                     @onError="showError($event)"
                     @onValid="inputBarCode=$event"/>
 

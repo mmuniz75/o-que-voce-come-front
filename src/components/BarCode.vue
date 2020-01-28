@@ -20,7 +20,7 @@
           }
     },        
     props: {
-      exists: Boolean,
+      notExists: Boolean,
       loadIDs: Boolean,
       value : ''
     },
@@ -49,14 +49,14 @@
              this.inputBarCode = this.value 
           },
           inputBarCode: function(){
-            if(!this.loadIDs && !this.exists)
+            if(!this.loadIDs && !this.notExists)
                return
             const isValid = this.inputBarCode.length==13
             this.$emit('onChange',isValid);
             if (!isValid)
               return;
 
-            if(this.exists) {
+            if(this.notExists) {
               this.barCodeExists();
               return;
             }  
