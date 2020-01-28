@@ -9,7 +9,6 @@
                 <div class="col-lg-6" style="background-color:#ffffff">
 
                     <bar-code :value="inputBarCode" 
-                              :exists="false" 
                               :loadIDs="!fromSelection" 
                               @onLoadIDs="setIds($event)" 
                               @onChange="clear($event)"

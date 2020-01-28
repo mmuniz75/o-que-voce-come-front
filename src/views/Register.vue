@@ -14,7 +14,6 @@
 
           <bar-code :value="inputBarCode"
                     :exists="true" 
-                    :load="false" 
                     @onError="showError($event)"
                     @onValid="inputBarCode=$event"/>
 
