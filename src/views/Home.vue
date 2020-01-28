@@ -125,8 +125,8 @@
                this.selectedFood = ids.foodId
                this.loadFoodBrandChemicals() 
             },
-            clear(valid){
-              if (!valid) {
+            clear(barCode){
+              if (barCode.length!=13) {
                 this.chemicals = []
                 this.brands = []
                 this.selectedBrand = 0

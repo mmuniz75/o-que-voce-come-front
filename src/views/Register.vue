@@ -12,11 +12,10 @@
       <div class="row justify-content-center">
         <div class="col-lg-6" style="background-color:#ffffff">
 
-          <bar-code :value="inputBarCode"
-                    :notExists="true" 
+          <bar-code :notExists="true" 
                     @onError="showError($event)"
-                    @onValid="inputBarCode=$event"
-                    @onChange="valid=$event" />
+                    @onChange="updateBarCode($event)"
+                    @onValid="validBarCode=true" />
 
           <div class="form-inline mb-3 mt-3">
             <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
@@ -59,7 +58,7 @@
             data-toggle="modal"
             data-target="#cadastradoModal"
             @click="saveChemicals"
-            :disabled="inputBarCode < 13 || selectedChemicals.length == 0 || !valid"
+            :disabled="!validBarCode || selectedChemicals.length == 0 || !validFoodBrand"
           >Cadastrar</button>
         </div>
       </div>
@@ -170,14 +169,19 @@
         inputBarCode: "",
         selectedChemicals: [],
         server : process.env.VUE_APP_SERVER,
-        valid : false
+        validBarCode : false,
+        validFoodBrand : false
       };
     },
     methods: {
+      updateBarCode(barcode){
+          this.inputBarCode=barcode
+          this.validBarCode =  barcode.length==13
+      },
       showError(errorMessage){
          this.errored = true
          this.message = errorMessage
-         this.valid = false 
+         this.validBarCode = false 
       },
       loadChemicals() {
         if (this.allChemicals.length > 0) return;
@@ -286,7 +290,7 @@
       },
       checkAlreadyExists() {
         this.loading = true;
-        this.valid = false
+        this.validFoodBrand = false
         axios
           .get(
             this.server +
@@ -302,7 +306,7 @@
           })
           .catch(error => {
             if (error.response.status != 404) this.handleServerError(error);
-            this.valid = true
+            this.validFoodBrand = true
           })
           .finally(() => (this.loading = false));
       }

@@ -51,9 +51,9 @@
           inputBarCode: function(){
             if(!this.loadIDs && !this.notExists)
                return
-            const isValid = this.inputBarCode.length==13
-            this.$emit('onChange',isValid);
-            if (!isValid)
+            
+            this.$emit('onChange',this.inputBarCode);
+            if (this.inputBarCode.length!=13)
               return;
 
             if(this.notExists) {
