@@ -21,7 +21,7 @@
     },        
     props: {
       exists: Boolean,
-      load: Boolean,
+      loadIDs: Boolean,
       value : ''
     },
     methods: {
@@ -38,6 +38,8 @@
           .catch(error => {
             if (error.response.status != 404) 
              this.$emit("onError",handleResponseError(error));
+            else 
+             this.$emit("onValid",this.inputBarCode);
           })
           .finally(() => (this.loading = false));
       }
@@ -47,7 +49,7 @@
              this.inputBarCode = this.value 
           },
           inputBarCode: function(){
-            if(!this.load && !this.exists)
+            if(!this.loadIDs && !this.exists)
                return
             const isValid = this.inputBarCode.length==13
             this.$emit('onChange',isValid);

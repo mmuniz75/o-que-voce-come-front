@@ -10,7 +10,7 @@
 
                     <bar-code :value="inputBarCode" 
                               :exists="false" 
-                              :load="!fromSelection" 
+                              :loadIDs="!fromSelection" 
                               @onLoadIDs="setIds($event)" 
                               @onChange="clear($event)"
                               @onFocus="fromSelection=false"

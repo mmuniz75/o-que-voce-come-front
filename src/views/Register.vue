@@ -12,7 +12,11 @@
       <div class="row justify-content-center">
         <div class="col-lg-6" style="background-color:#ffffff">
 
-          <bar-code :value="inputBarCode" :exists="true" :load="false" @onError="showError($event)"/>
+          <bar-code :value="inputBarCode"
+                    :exists="true" 
+                    :load="false" 
+                    @onError="showError($event)"
+                    @onValid="inputBarCode=$event"/>
 
           <div class="form-inline mb-3 mt-3">
             <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
@@ -89,7 +93,7 @@
             data-toggle="modal"
             data-target="#cadastradoModal"
             @click="saveChemicals"
-            :disabled="inputBarCode.length < 13 || selectedChemicals.length == 0"
+            :disabled="inputBarCode < 13 || selectedChemicals.length == 0"
           >Cadastrar</button>
         </div>
       </div>
