@@ -12,7 +12,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-6" style="background-color:#ffffff">
 
-          <bar-code :value="inputBarCode" :exists="true" />
+          <bar-code :value="inputBarCode" :exists="true" :load="false" @onError="showError($event)"/>
 
           <div class="form-inline mb-3 mt-3">
             <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
@@ -199,6 +199,10 @@
       };
     },
     methods: {
+      showError(errorMessage){
+         this.errored = true
+         this.message = errorMessage 
+      },
       loadChemicals() {
         if (this.allChemicals.length > 0) return;
 

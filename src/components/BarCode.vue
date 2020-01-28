@@ -5,20 +5,18 @@
                      @focus="focus"
                      v-model="inputBarCode" maxlength="13">
          <spinner :loading="loading" />            
-         <message :text="message" isError="true"  @onClose="message = ''"/> 
   </div>                   
 </template>
 
 <script>
   import handleResponseError from '../funcs'
-  import axios from 'axios';
+  import axios from 'axios'
 
   export default {
     data: function () {
           return {
             loading: false,
             inputBarCode: '',
-            message: ''
           }
     },        
     props: {
@@ -35,12 +33,11 @@
         axios
           .get(process.env.VUE_APP_SERVER + "/brands/foods/" + this.inputBarCode)
           .then(response => {
-            this.message = "Codigo de barra já cadastrado";
-            this.inputBarCode = ''
+            this.$emit("onError","Codigo de barra já cadastrado");
           })
           .catch(error => {
             if (error.response.status != 404) 
-              this.message = handleResponseError(error);
+             this.$emit("onError",handleResponseError(error));
           })
           .finally(() => (this.loading = false));
       }
@@ -70,7 +67,7 @@
             })
             .catch(error => {
               this.loading = false
-              this.message = handleResponseError(error)
+              this.$emit("onError",handleResponseError(error));
             })  
             .finally(() => this.loading = false)
           }

@@ -13,7 +13,9 @@
                               :load="!fromSelection" 
                               @onLoadIDs="setIds($event)" 
                               @onChange="clear($event)"
-                              @onFocus="fromSelection=false" />
+                              @onFocus="fromSelection=false"
+                              @onError="message=$event"
+                               />
 
                     <div class="mb-3  mt-3" >
                         <select class="form-control form-control-lg col-12 mr-2" v-model="selectedFood" @click="fromSelection=true">
@@ -48,7 +50,7 @@
 
         </div>
        
-       <message :text="message" isError="true"  @onClose="message = ''"/> 
+       <message :text="message" isError="true"  @onClose="message = ''"/>
        <spinner :loading="loading" />
 
   </div>
@@ -137,19 +139,14 @@
             }
         },
         watch: {
-            inputBarCode: function(){
-              
-            },
             selectedFood: function(){
               if(this.fromSelection) {
                 this.selectedBrand=0;
+                this.inputBarCode = "";
+                this.chemicals = []
               }
                 
               if(this.selectedFood==0) { 
-                if(this.fromSelection) {
-                  this.inputBarCode = "";
-                  this.chemicals = []
-                }
                 return;
               }
                                               
