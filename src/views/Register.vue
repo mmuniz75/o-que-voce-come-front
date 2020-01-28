@@ -15,7 +15,8 @@
           <bar-code :value="inputBarCode"
                     :notExists="true" 
                     @onError="showError($event)"
-                    @onValid="inputBarCode=$event"/>
+                    @onValid="inputBarCode=$event"
+                    @onChange="valid=$event" />
 
           <div class="form-inline mb-3 mt-3">
             <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
@@ -58,7 +59,7 @@
             data-toggle="modal"
             data-target="#cadastradoModal"
             @click="saveChemicals"
-            :disabled="inputBarCode < 13 || selectedChemicals.length == 0"
+            :disabled="inputBarCode < 13 || selectedChemicals.length == 0 || !valid"
           >Cadastrar</button>
         </div>
       </div>
@@ -168,13 +169,15 @@
         inputBrand: "",
         inputBarCode: "",
         selectedChemicals: [],
-        server : process.env.VUE_APP_SERVER
+        server : process.env.VUE_APP_SERVER,
+        valid : false
       };
     },
     methods: {
       showError(errorMessage){
          this.errored = true
-         this.message = errorMessage 
+         this.message = errorMessage
+         this.valid = false 
       },
       loadChemicals() {
         if (this.allChemicals.length > 0) return;
@@ -283,6 +286,7 @@
       },
       checkAlreadyExists() {
         this.loading = true;
+        this.valid = false
         axios
           .get(
             this.server +
@@ -295,11 +299,10 @@
           .then(response => {
             this.errored = true;
             this.message = "Alimento e marca já cadastrados";
-            this.selectedBrand = 0;
-            this.selectedFood = 0;
           })
           .catch(error => {
             if (error.response.status != 404) this.handleServerError(error);
+            this.valid = true
           })
           .finally(() => (this.loading = false));
       }
