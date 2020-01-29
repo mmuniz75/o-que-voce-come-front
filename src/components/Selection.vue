@@ -34,20 +34,15 @@
     data : function() {
       return {
         showDialog : false,
-        selectedValue : 0,
-        updateValue : true
+        selectedValue : 0
       }
     },
     watch :{
       selectedValue : function(){
-          this.updateValue = false
           this.$emit('onSelected',this.selectedValue)
       },
       value : function() {
-        if(this.updateValue)
           this.selectedValue = this.value
-        else
-          this.updateValue = true
       }
     },
     methods : {
