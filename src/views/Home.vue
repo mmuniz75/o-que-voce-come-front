@@ -100,15 +100,6 @@
               this.loading = false
               this.message = handleResponseError(error)
             },
-            compare( a, b ) {
-              if ( a.name.toLowerCase() < b.name.toLowerCase() ){
-                return -1;
-              }
-              if ( a.name.toLowerCase() > b.name.toLowerCase() ){
-                return 1;
-              }
-              return 0;
-            },
             openRegister() {
               this.$router.push('/register')
             },
