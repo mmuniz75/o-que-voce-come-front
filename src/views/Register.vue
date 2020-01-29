@@ -24,12 +24,7 @@
                 <option :value="food.id" :key="index">{{food.name}}</option>
               </template>
             </select>
-            <button
-              class="btn btn-lg shadow-none p-0 m-0"
-              data-toggle="modal"
-              data-target="#cadastroAlimentoModal"
-              data-whatever="@mdo"
-            >
+            <button class="btn btn-lg shadow-none p-0 m-0" @click="showFoodDialog=true">
               <i class="fa fa-plus"></i>
             </button>
           </div>
@@ -40,12 +35,7 @@
                 <option :value="brand.id" :key="index">{{brand.name}}</option>
               </template>
             </select>
-            <button
-              class="btn btn-lg shadow-none p-0 m-0"
-              data-toggle="modal"
-              data-target="#cadastroMarcaModal"
-              data-whatever="@mdo"
-            >
+            <button class="btn btn-lg shadow-none p-0 m-0" @click="showBrandDialog=true">
               <i class="fa fa-plus b-0"></i>
             </button>
           </div>
@@ -64,80 +54,8 @@
       </div>
     </div>
 
-    <div
-      class="modal fade"
-      id="cadastroMarcaModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Cadastrar uma marca</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="recipient-name" class="col-form-label">Nome da Marca:</label>
-                <input type="text" class="form-control" id="brandInput" v-model="inputBrand" />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button
-              type="button"
-              @click="saveBrand"
-              :disabled="inputBrand.length == 0"
-              class="btn btn-primary"
-            >Cadastrar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="modal fade"
-      id="cadastroAlimentoModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Cadastrar um alimento</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="recipient-name" class="col-form-label">Nome do Alimento:</label>
-                <input type="text" class="form-control" id="foodInput" v-model="inputFood" />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button
-              type="button"
-              @click="saveFood"
-              :disabled="inputFood.length == 0"
-              class="btn btn-primary"
-            >Cadastrar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <dialog-register domain="Alimento" :show="showFoodDialog" @onClose="showFoodDialog=false" @onSave="saveFood($event)" />    
+    <dialog-register domain="Marca" :show="showBrandDialog" @onClose="showBrandDialog=false" @onSave="saveBrand($event)"/>    
     <message :text="message" :isError="errored" @onClose="message = ''"/>
     <spinner :loading="loading" />
 
@@ -148,11 +66,13 @@
   import axios from "axios";
   import handleResponseError from '../funcs'
   import allChemicals from '../components/AllChemicals'
+  import dialogRegister from '../components/DialogRegister'
   import {eventBus} from '../main'
 
   export default {
     components : {
-        allChemicals
+        allChemicals,
+        dialogRegister
     },
     data: function() {
       return {
@@ -169,8 +89,10 @@
         inputBarCode: "",
         selectedChemicals: [],
         server : process.env.VUE_APP_SERVER,
-        validBarCode : false,
-        validFoodBrand : false
+        validBarCode: false,
+        validFoodBrand: false,
+        showBrandDialog: false,
+        showFoodDialog: false
       };
     },
     methods: {
@@ -208,13 +130,12 @@
             this.handleServerError(error);
           });
       },
-      saveFood() {
-        $("#cadastroAlimentoModal").modal("hide");
+      saveFood(food) {
+        this.showFoodDialog = false
         this.loading = true;
         axios
-          .post(this.server + "/foods", { name: this.inputFood })
+          .post(this.server + "/foods", { name: food })
           .then(response => {
-            this.inputFood = "";
             this.foods.push(response.data);
             this.foods.sort(this.compare);
             this.selectedFood = response.data.id;
@@ -226,13 +147,12 @@
             this.loading = false;
           });
       },
-      saveBrand() {
-        $("#cadastroMarcaModal").modal("hide");
+      saveBrand(brand) {
+        this.showBrandDialog = false
         this.loading = true;
         axios
-          .post(this.server + "/brands", { name: this.inputBrand })
+          .post(this.server + "/brands", { name: brand })
           .then(response => {
-            this.inputBrand = "";
             this.brands.push(response.data);
             this.brands.sort(this.compare);
             this.selectedBrand = response.data.id;
