@@ -19,12 +19,14 @@
 
           <selection domain="Alimento" 
                      :items="foods" 
+                     :value="selectedFood"
                      :add="true" 
                      @onSave="saveFood($event)" 
                      @onSelected="selectedFood=$event"/>
 
           <selection domain="Marca" 
                      :items="brands"
+                     :value="selectedBrand"
                      :add="true" 
                      @onSave="saveBrand($event)" 
                      @onSelected="selectedBrand=$event"/>
