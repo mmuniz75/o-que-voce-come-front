@@ -16,22 +16,17 @@
                               @onError="message=$event"
                                />
 
-                    <div class="mb-3  mt-3" >
-                        <select class="form-control form-control-lg col-12 mr-2" v-model="selectedFood" @click="fromSelection=true">
-                            <option value="0">Escolha o Alimento</option>
-                            <template v-for="(food, index) in foods">
-                                <option :value="food.id" :key="index" >{{food.name}}</option>
-                            </template>
-                        </select>
-                    </div>
-                    <div class="mb-3" v-if="selectedFood!=0">
-                        <select class="form-control form-control-lg col-12 mr-2" v-model="selectedBrand" @click="fromSelection=true">
-                            <option value="0">Escolha a Marca</option>
-                            <template v-for="(brand, index) in brands">
-                                <option :value="brand.brandId" :key="index">{{brand.brand}}</option>
-                            </template>
-                        </select>
-                    </div>
+                    <selection domain="Alimento" 
+                              :items="foods" 
+                              :value="selectedFood"
+                              @click="fromSelection=true" 
+                              @onSelected="selectedFood=$event"/>
+
+                    <selection domain="Marca" 
+                              :items="brands"
+                              :value="selectedBrand"
+                              @click="fromSelection=true"
+                              @onSelected="selectedBrand=$event"/>
 
                     <chemical :items="chemicals" />
 
@@ -143,6 +138,7 @@
               }
                 
               if(this.selectedFood==0) { 
+                this.brands = []
                 return;
               }
                                               
@@ -157,7 +153,7 @@
                   return;
               }      
               try{      
-                const barCode = this.brands.filter(b => b.brandId === this.selectedBrand)[0].barCode
+                const barCode = this.brands.filter(b => b.id === this.selectedBrand)[0].barCode
                 this.inputBarCode = barCode
                 this.loadFoodBrandChemicals()
               }catch(e){

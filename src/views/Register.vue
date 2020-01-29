@@ -17,28 +17,17 @@
                     @onChange="updateBarCode($event)"
                     @onValid="validBarCode=true" />
 
-          <div class="form-inline mb-3 mt-3">
-            <select class="form-control form-control-lg col-11 mr-2" v-model="selectedFood">
-              <option value="0">Escolha o Alimento</option>
-              <template v-for="(food, index) in foods">
-                <option :value="food.id" :key="index">{{food.name}}</option>
-              </template>
-            </select>
-            <button class="btn btn-lg shadow-none p-0 m-0" @click="showFoodDialog=true">
-              <i class="fa fa-plus"></i>
-            </button>
-          </div>
-          <div class="form-inline mb-3">
-            <select class="form-control form-control-lg col-11 mr-2" v-model="selectedBrand">
-              <option value="0">Escolha a Marca</option>
-              <template v-for="(brand,index) in brands">
-                <option :value="brand.id" :key="index">{{brand.name}}</option>
-              </template>
-            </select>
-            <button class="btn btn-lg shadow-none p-0 m-0" @click="showBrandDialog=true">
-              <i class="fa fa-plus b-0"></i>
-            </button>
-          </div>
+          <selection domain="Alimento" 
+                     :items="foods" 
+                     :add="true" 
+                     @onSave="saveFood($event)" 
+                     @onSelected="selectedFood=$event"/>
+
+          <selection domain="Marca" 
+                     :items="brands"
+                     :add="true" 
+                     @onSave="saveBrand($event)" 
+                     @onSelected="selectedBrand=$event"/>
 
           <all-chemicals :items="allChemicals" @selections="selectedChemicals=$event"/>
 
@@ -54,8 +43,6 @@
       </div>
     </div>
 
-    <dialog-register domain="Alimento" :show="showFoodDialog" @onClose="showFoodDialog=false" @onSave="saveFood($event)" />    
-    <dialog-register domain="Marca" :show="showBrandDialog" @onClose="showBrandDialog=false" @onSave="saveBrand($event)"/>    
     <message :text="message" :isError="errored" @onClose="message = ''"/>
     <spinner :loading="loading" />
 
@@ -66,13 +53,11 @@
   import axios from "axios";
   import handleResponseError from '../funcs'
   import allChemicals from '../components/AllChemicals'
-  import dialogRegister from '../components/DialogRegister'
   import {eventBus} from '../main'
 
   export default {
     components : {
-        allChemicals,
-        dialogRegister
+        allChemicals
     },
     data: function() {
       return {
@@ -90,9 +75,7 @@
         selectedChemicals: [],
         server : process.env.VUE_APP_SERVER,
         validBarCode: false,
-        validFoodBrand: false,
-        showBrandDialog: false,
-        showFoodDialog: false
+        validFoodBrand: false
       };
     },
     methods: {
@@ -131,7 +114,6 @@
           });
       },
       saveFood(food) {
-        this.showFoodDialog = false
         this.loading = true;
         axios
           .post(this.server + "/foods", { name: food })
@@ -148,7 +130,6 @@
           });
       },
       saveBrand(brand) {
-        this.showBrandDialog = false
         this.loading = true;
         axios
           .post(this.server + "/brands", { name: brand })
