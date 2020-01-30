@@ -19,7 +19,8 @@
                     <auto-complete domain="Alimento" 
                               :items="foods" 
                               :value="selectedFood"
-                              @onSelected="setFood($event)"/>
+                              @click="fromSelection=true"
+                              @onSelected="selectedFood=$event"/>
 
                     <selection domain="Marca" 
                               :items="brands"
@@ -69,10 +70,6 @@
             }
         },
         methods: {
-            setFood(foodId){
-                this.fromSelection=true
-                this.selectedFood=foodId
-            },
             loadBrands(){
               axios
               .get(this.server + '/foods/' + this.selectedFood + '/brands')

@@ -9,6 +9,7 @@
             :serializer="s => s.name"
             :placeholder="'Escolha o ' + domain"
             :external="selectedValue"
+            @click="click"
             @hit="selectValue($event)"
           />                
 
@@ -73,6 +74,9 @@
           
           this.$emit('onSelected',food.id)
       },
+      click() {
+        this.$emit('click')
+      }
     },
     created() {
         eventBus.$on('clearInputs', () => {
