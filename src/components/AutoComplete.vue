@@ -1,24 +1,28 @@
 <template>
-   <div >
+   <div>
         <vue-bootstrap-typeahead
-            :data="items"
-            v-model="selectedValue"
-            size="lg"
-            :minMatchingChars="0"
-            inputClass="form-control form-control-lg mb-3 mt-3 col-11"
-            :serializer="s => s.name"
-            :placeholder="'Escolha o ' + domain"
-            :external="selectedValue"
-            @click="click"
-            @hit="selectValue($event)"
-          />                
-
-        <button class="btn btn-lg shadow-none p-0 m-0" 
-                v-if="add" 
-                @click="showDialog=true">
-          <i class="fa fa-plus"></i>
-        </button>
-       <dialog-register :domain="domain" :show="showDialog" @onClose="showDialog=false" @onSave="save($event)" />    
+          :data="items"
+          v-model="selectedValue"
+          size="lg"
+          :minMatchingChars="0"
+          inputClass="form-control form-control-lg mb-3 mt-3 col-11"
+          :serializer="s => s.name"
+          :placeholder="'Escolha o ' + domain"
+          :external="selectedValue"
+          @click="click"
+          @hit="selectValue($event)"
+        >                
+        <template slot="append">
+          <button class="btn btn-lg shadow-none" 
+                  v-if="add" 
+                  @click="showDialog=true">
+            <i class="fa fa-plus"></i>
+          </button>
+        </template>
+      
+        </vue-bootstrap-typeahead>
+        
+      <dialog-register :domain="domain" :show="showDialog" @onClose="showDialog=false" @onSave="save($event)" />    
    </div>       
 </template>
 
