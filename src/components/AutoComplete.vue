@@ -5,7 +5,7 @@
             v-model="selectedValue"
             size="lg"
             :minMatchingChars="0"
-            inputClass="form-control form-control-lg mt-3 col-12"
+            inputClass="form-control form-control-lg mb-3 mt-3 col-11"
             :serializer="s => s.name"
             :placeholder="'Escolha o ' + domain"
             :external="selectedValue"
@@ -45,8 +45,7 @@
     },
     watch :{
       selectedValue: function(){
-        if(this.selectedValue=='' || 
-           this.items.filter(f => f.name === this.selectedValue).length==0)
+        if(this.selectedValue=='' || this.items.filter(f => f.name === this.selectedValue).length==0)
             this.$emit('onSelected',0)
       },
       value : function() {
