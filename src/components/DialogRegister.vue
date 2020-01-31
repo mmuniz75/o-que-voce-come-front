@@ -19,7 +19,7 @@
             <form>
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Nome da {{domain}}:</label>
-                <input type="text" class="form-control" v-model="value" />
+                <input type="text" class="form-control" @input='evt=>value=evt.target.value' />
               </div>
             </form>
           </div>
