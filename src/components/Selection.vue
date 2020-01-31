@@ -2,7 +2,7 @@
    <div>
     <div class="form-inline mb-3 mt-3">
         <select class="form-control form-control-lg col-12 mr-2" v-model="selectedValue" @click="click">
-          <option :value="0">Escolha o {{domain}}</option>
+          <option :value="0">Escolha a {{domain}}</option>
           <template v-for="(item, index) in items">
             <option :value="item.id" :key="index">{{item.name}}</option>
           </template>
