@@ -5,7 +5,7 @@
           v-model="selectedValue"
           size="lg"
           :minMatchingChars="0"
-          inputClass="form-control form-control-lg mb-3 mt-3 col-11"
+          inputClass="form-control form-control-lg mb-3 mt-3"
           :serializer="s => s.name"
           :placeholder="'Escolha o ' + domain"
           :external="selectedValue"

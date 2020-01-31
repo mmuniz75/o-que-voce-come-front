@@ -1,7 +1,7 @@
 <template>
    <div>
     <div class="form-inline mb-3 mt-3">
-        <select class="form-control form-control-lg col-11 mr-2" v-model="selectedValue" @click="click">
+        <select class="form-control form-control-lg col-12 mr-2" v-model="selectedValue" @click="click">
           <option :value="0">Escolha o {{domain}}</option>
           <template v-for="(item, index) in items">
             <option :value="item.id" :key="index">{{item.name}}</option>

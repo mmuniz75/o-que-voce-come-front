@@ -1,6 +1,6 @@
 <template>
   <div>
-        <input class="form-control form-control-lg mb-3 mt-3 col-11" 
+        <input class="form-control form-control-lg mb-3 mt-3" 
                      type="tel" placeholder="Código de barras" 
                      @focus="focus"
                      v-model="inputBarCode" maxlength="13">
