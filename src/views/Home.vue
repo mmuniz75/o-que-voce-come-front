@@ -26,7 +26,8 @@
                               :items="brands"
                               :value="selectedBrand"
                               @click="fromSelection=true"
-                              @onSelected="selectedBrand=$event"/>
+                              @onSelected="selectedBrand=$event"
+                              v-if="selectedFood!=0" />
 
                     <chemical :items="chemicals" />
 
