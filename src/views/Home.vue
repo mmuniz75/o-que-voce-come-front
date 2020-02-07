@@ -108,8 +108,8 @@
                if(!ids) 
                   return;
 
-               this.selectedBrand = ids.brandId
                this.selectedFood = ids.foodId
+               this.selectedBrand = ids.brandId
                this.loadFoodBrandChemicals() 
             },
             clear(barCode){

@@ -55,6 +55,7 @@
       }
     },
     created() {
+        this.selectedValue = this.value
         eventBus.$on('clearInputs', () => {
             this.selectedValue = 0;
         })
