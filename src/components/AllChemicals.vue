@@ -1,5 +1,6 @@
 <template>
-      <div class="card mb-3" style="width: 20rem;">
+    <div>
+        <div class="card mb-3" style="width: 20rem;">
             <div class="card-body">
               <h5 class="card-title mb-4">Adicione os Produtos Quimicos</h5>
 
@@ -32,6 +33,8 @@
               </template>
             </div>
           </div>
+          <span class="card-title mt-4 mb-2" ><i>Não achou um químico? <a href="mailto:betterworldemail@gmail.com">Solicite aqui</a></i></span>
+  </div>                   
 </template>
 
 <script>
