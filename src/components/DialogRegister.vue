@@ -19,7 +19,7 @@
             <form>
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Nome da {{domain}}:</label>
-                <input type="text" class="form-control" @input='evt=>value=evt.target.value' v-model="text" />
+                <input type="text" ref="inputField" class="form-control" @input='evt=>value=evt.target.value' v-model="text" />
               </div>
             </form>
           </div>
@@ -54,6 +54,9 @@
           if(this.show) {
             this.text = ''
             $("#" + this.domain).modal("show");
+            setTimeout(() => {
+               this.$refs.inputField.focus();
+            }, 500);
           }else
             $("#" + this.domain).modal("hide");    
        }
