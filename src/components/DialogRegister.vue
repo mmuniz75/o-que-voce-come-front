@@ -19,7 +19,7 @@
             <form>
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Nome da {{domain}}:</label>
-                <input type="text" class="form-control" @input='evt=>value=evt.target.value' />
+                <input type="text" class="form-control" @input='evt=>value=evt.target.value' v-model="text" />
               </div>
             </form>
           </div>
@@ -45,13 +45,14 @@
     },
     data : function(){
       return {
-        value : ''
+        value : '',
+        text : ''
       }
     },
     watch:{
        show : function(){
           if(this.show) {
-            this.value = ''
+            this.text = ''
             $("#" + this.domain).modal("show");
           }else
             $("#" + this.domain).modal("hide");    
